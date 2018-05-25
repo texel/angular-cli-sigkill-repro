@@ -1,27 +1,16 @@
-# TestTest
+# SIGINT issue repro for Angular CLI 6.0.3
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.5.
+This repo exhibits an issue with killing tests run using `ng test`.
+Running tests with Yarn is the most problematic but npm also requires
+the user to send multiple SIGINT signals to kill tests. 
 
-## Development server
+To reproduce:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+* Clone the repo
+* `$ npm install`
+* [Install Yarn](https://yarnpkg.com/en/docs/install#mac-stable)
+* Run `$ yarn test`
+* Kill the test process using ctrl+c
+* The tests will still be running, requiring a `$ killall -9 ng`
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+This issue only occurs when at least one library is present- a simple Angular CLI app with no libraries doesn't seem to exhibit this problem.
